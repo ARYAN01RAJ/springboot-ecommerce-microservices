@@ -7,6 +7,7 @@
 ## 📑 Table of Contents
 
 - Overview
+- Architecture
 - Key Features
 - Architecture
 - Technology Stack
@@ -106,39 +107,20 @@ Major concepts demonstrated:
 
 # Architecture
 
-``` text
-                                    Client
-                                      │
-                     ┌────────────────┴────────────────┐
-                     │                                 │
-                     ▼                                 ▼
-          API Gateway Service              Direct Service Access
-                     │
-                     ▼
-          ┌───────────────────────────────┐
-          │     Authentication Layer      │
-          │ (JWT Authentication Service)  │
-          └───────────────────────────────┘
-                     │
-     ┌───────────────┼───────────────────────────────┐
-     │               │                               │
-     ▼               ▼                               ▼
- Item Service ◄────► Inventory Service ◄────► Order Service
-        ▲                 │                    ▲
-        │                 │                    │
-        └─────────────────┴──── OpenFeign ────┘
-                          │
-                          │ Low Stock Event
-                          ▼
-                    Apache Kafka
-                          │
-                          ▼
-              Notification Service
+The following diagram illustrates the overall architecture of the application, including client interaction, API Gateway, Eureka Service Discovery, microservices, OpenFeign communication, Apache Kafka event-driven messaging, and independent MySQL databases for each service.
 
-─────────────────────────────────────────────────────────────
-      All services register with Eureka Server
-      Each service maintains its own MySQL database
-```
+<p align="center">
+  <img src="screenshots/architecture-diagram.png" alt="Spring Boot E-Commerce Microservices Architecture" width="100%">
+</p>
+
+**Architecture Highlights**
+
+- Client requests are routed through the **Spring Cloud Gateway**.
+- All services register with **Eureka Server** for service discovery.
+- **Authentication Service** provides JWT-based authentication and authorization.
+- **Item, Inventory, and Order Services** communicate synchronously using **OpenFeign**.
+- **Inventory Service** publishes events to **Apache Kafka**, which are consumed by the **Notification Service**.
+- Each microservice maintains its own independent **MySQL database**.
 
 ------------------------------------------------------------------------
 
